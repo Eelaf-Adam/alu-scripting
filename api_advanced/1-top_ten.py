@@ -1,36 +1,23 @@
 #!/usr/bin/python3
-"""
-sdfgfg
-"""
+"""Contains top_ten function"""
 import requests
 
 
 def top_ten(subreddit):
-    """
-    sdfvb
-    """
-    url = ("https://oauth.reddit.com/r/{}/hot.json?limit=10"
-           .format(subreddit))
-    headers = {"User-Agent": "Mozilla/5.0"}
-
-    response = requests.get(
-                url,
-                headers=headers,
-                allow_redirects=False
-                )
-
-    if response.status_code == 200:
-        try:
-            data = response.json().get('data', {})
-            posts = data.get('children', [])
-
-            if not posts:
-                print("OK")
-                return
-
-            for post in posts[:10]:
-                print(post['data'].get('title', "No Title Found"))
-        except ValueError:
-            print("OK")
-    else:
-        print("OK")
+    """Print the titles of the 10 hottest posts on a given subreddit."""
+    url = "https://www.reddit.com/r/{}/hot/.json".format(subreddit)
+    headers = {
+        "User-Agent": "0x16-api_advanced:project:\
+v1.0.0 (by /u/firdaus_cartoon_jr)"
+    }
+    params = {
+        "limit": 10
+    }
+    response = requests.get(url, headers=headers, params=params,
+                            allow_redirects=False)
+    if response.status_code == 404:
+        print("None")
+        return
+    results = response.json().get("data")
+    [print(c.get("data").get("title")) for c in results.get("children")]
+    
